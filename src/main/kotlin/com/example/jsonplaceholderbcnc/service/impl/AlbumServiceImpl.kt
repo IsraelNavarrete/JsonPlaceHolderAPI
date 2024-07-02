@@ -6,7 +6,7 @@ import com.example.jsonplaceholderbcnc.model.Photo
 import com.example.jsonplaceholderbcnc.service.AlbumService
 import com.example.jsonplaceholderbcnc.util.EndpointUtil
 import com.example.jsonplaceholderbcnc.util.Endpoints
-import lombok.extern.slf4j.Slf4j
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.*
 import org.springframework.stereotype.Service
@@ -16,42 +16,86 @@ import java.util.*
 
 
 @Service
-@Slf4j
 class AlbumServiceImpl : AlbumService {
+
     @Autowired
     private lateinit var restTemplate: RestTemplate
     private val entity = HttpEntity<Unit>(HttpHeaders())
 
+    private final val logger = LoggerFactory.getLogger(this::class.java)
+
     /**
      * @return A list of aLbums with a detail of each photo from an album
      */
-    //TODO falta añadir fotos
     @Throws(CustomException::class)
     override fun listAlbum(): List<Album> {
 
-        val uri = EndpointUtil.getEndpoint(Endpoints.ALBUMS.name)
+        val uri = EndpointUtil.getEndpoint(Endpoints.ALBUMS.value)
 
-        val albums: ResponseEntity<Array<Album>> = restTemplate.exchange(
+        val response: ResponseEntity<Array<Album>> = restTemplate.exchange(
             uri, HttpMethod.GET, entity, Array<Album>::class.java
         )
+        try {
+            if (response.body != null) {
+                val albums = response.body!!.asList().toMutableList()
 
-        return if (albums.body != null) {
-            albums.body!!.asList()
-        } else {
-            throw CustomException("There is no info on this endpoint: $uri", HttpStatus.NOT_FOUND)
-        }
-    }
+                logger.info("Retrieved albums: $albums")
 
-    private val photos: List<Photo>
-        get() {
-            val uri: URI = EndpointUtil.getEndpoint(Endpoints.ALBUMS.name)
-            val responseEntity = restTemplate.exchange(
-                uri, HttpMethod.GET, entity, Array<Photo>::class.java
-            )
-            return if (responseEntity.body != null) {
-                responseEntity.body!!.asList()
+                return addPhotosInfo(albums, photos)
+
             } else {
                 throw CustomException("There is no info on this endpoint: $uri", HttpStatus.NOT_FOUND)
+            }
+        } catch (e: java.lang.Exception) {
+            logger.error("Unexpected error occurred while calling this endpoint: $uri, error: ${e.message}")
+            throw CustomException("Unexpected error occurred", HttpStatus.INTERNAL_SERVER_ERROR)
+        }
+
+    }
+
+    /**
+     * Recieves a list of albums and photos. Groups all photos by album's id and
+     * then adds them to the album list of photos
+     */
+    private fun addPhotosInfo(albums: MutableList<Album>, photos: List<Photo>): List<Album> {
+
+        val groupedPhotos = photos.groupBy { it.albumId }
+
+        albums.forEach { album ->
+            album.photos = groupedPhotos[album.id] ?: emptyList()
+        }
+
+        return albums
+
+    }
+
+    /**
+     * Retrieves a list of photos from Json Placeholder
+     */
+    private val photos: List<Photo>
+        get() {
+
+            val uri: URI = EndpointUtil.getEndpoint(Endpoints.PHOTOS.value)
+
+            try {
+                val responseEntity = restTemplate.exchange(
+                    uri, HttpMethod.GET, entity, Array<Photo>::class.java
+                )
+
+                if (responseEntity.body != null) {
+
+                    val result = responseEntity.body!!.asList()
+
+                    logger.info("Retrieved photos: $result")
+
+                    return result
+                } else {
+                    throw CustomException("There is no info on this endpoint: $uri", HttpStatus.NOT_FOUND)
+                }
+
+            } catch (e: java.lang.Exception) {
+                logger.error("Unexpected error occurred while calling this endpoint: $uri, error: ${e.message}")
+                throw CustomException("Unexpected error occurred", HttpStatus.INTERNAL_SERVER_ERROR)
             }
         }
 }
