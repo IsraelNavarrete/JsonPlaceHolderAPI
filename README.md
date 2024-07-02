@@ -37,7 +37,7 @@ El segundo paso sería descargarnos una release válida del microservicio como [
 Para ello lo primero que tenemos que hacer es abrir el IDE elegido (quizás si es la primera vez que se abre pide unos requisitos previos a poder importar el proyecto)
 ![image](https://github.com/IsraelNavarrete/JsonPlaceHolderAPI/assets/61150530/7fb99108-2127-40c7-ba6f-0e4714e4d6e7)
 
-Como se puede ver en la imagen hay un voton que pone `"Open"` podemos utilizarlo para abrir el proyecto. para ello solo habría que navegar hasta la carpeta donde lo tengamos.
+Como se puede ver en la imagen hay un boton que pone `"Open"` podemos utilizarlo para abrir el proyecto. para ello solo habría que navegar hasta la carpeta donde lo tengamos.
 
 Cuando abra el proyecto tendremos que ir a la parte derecha del IDE y junto a los botones de la barra de arriba veremos uno en vertical que pone `"maven"`
 
@@ -47,7 +47,7 @@ Se nos tiene que abrir esta pestaña.
 
 ![image](https://github.com/IsraelNavarrete/JsonPlaceHolderAPI/assets/61150530/b39b9ecc-a2b0-4583-9f11-f4a54a98b6be)
 
-Cuando esté abierta lo más comodo y sencillo es dar doble click en los botones de `"clean"` e `"install"`. Cuando acabe la operación de `"install"` entonces nos dirijimos a la parte izquierda del IDE y si no tuvieramos abierta la pestaña de `"project"` sería darle al botón igual que con `"maven"`.
+Cuando esté abierta lo más cómodo y sencillo es dar doble click en los botones de `"clean"` e `"install"`. Cuando acabe la operación de `"install"` entonces nos dirijimos a la parte izquierda del IDE y si no tuvieramos abierta la pestaña de `"project"` sería darle al botón igual que con `"maven"`.
 
 Una vez abierto podremos ver la estructura del proyecto de esta forma:
 
