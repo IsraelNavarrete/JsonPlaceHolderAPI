@@ -19,7 +19,9 @@ class WebSecurityConfig {
             .csrf { obj: CsrfConfigurer<HttpSecurity> -> obj.disable() }
             .cors { obj: CorsConfigurer<HttpSecurity> -> obj.disable() }
             .authorizeHttpRequests { auth ->
-                auth.requestMatchers("v1/jsonplaceholder/album").permitAll()
+                auth.requestMatchers("/v1/jsonplaceholder/album").permitAll()
+                    .requestMatchers("/swagger-ui/*").permitAll()
+                    .requestMatchers("/v3/api-docs/**").permitAll()
                     .anyRequest().authenticated()
             }
             .build()
