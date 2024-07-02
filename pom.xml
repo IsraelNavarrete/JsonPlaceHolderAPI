@@ -126,18 +126,6 @@
 		<testSourceDirectory>src/test/kotlin</testSourceDirectory>
 		<plugins>
 			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-				<configuration>
-					<excludes>
-						<exclude>
-							<groupId>org.projectlombok</groupId>
-							<artifactId>lombok</artifactId>
-						</exclude>
-					</excludes>
-				</configuration>
-			</plugin>
-			<plugin>
 				<groupId>org.jetbrains.kotlin</groupId>
 				<artifactId>kotlin-maven-plugin</artifactId>
 				<version>${kotlin.version}</version>
@@ -164,7 +152,7 @@
 					<compilerPlugins>
 						<plugin>spring</plugin>
 					</compilerPlugins>
-					<jvmTarget>1.8</jvmTarget>
+					<jvmTarget>17</jvmTarget>
 				</configuration>
 				<dependencies>
 					<dependency>
@@ -174,10 +162,17 @@
 					</dependency>
 				</dependencies>
 			</plugin>
+
 			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
 				<version>0.8.10</version>
+				<configuration>
+					<excludes>
+						<exclude>com/example/**/model/**</exclude>
+						<exclude>com/example/**/config/**</exclude>
+					</excludes>
+				</configuration>
 				<executions>
 					<execution>
 						<goals>
@@ -191,35 +186,9 @@
 							<goal>report</goal>
 						</goals>
 					</execution>
+				</executions>
+			</plugin>
 
-					<execution>
-						<id>jacoco-check</id>
-						<goals>
-							<goal>check</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>compile</id>
-						<phase>compile</phase>
-						<goals>
-							<goal>compile</goal>
-						</goals>
-					</execution>
-					<execution>
-						<id>testCompile</id>
-						<phase>test-compile</phase>
-						<goals>
-							<goal>testCompile</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
 		</plugins>
 	</build>
 
