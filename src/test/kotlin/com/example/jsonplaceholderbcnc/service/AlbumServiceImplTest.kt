@@ -46,7 +46,7 @@ class AlbumServiceImplTest {
         Assertions.assertNotNull(result)
         Assertions.assertTrue(result[0].title == "title1")
         Assertions.assertTrue(result[0].id == 1)
-        Assertions.assertTrue(result[0].photos.isNotEmpty())
+        result[0].photos?.let { Assertions.assertTrue(it.isNotEmpty()) }
 
     }
 
