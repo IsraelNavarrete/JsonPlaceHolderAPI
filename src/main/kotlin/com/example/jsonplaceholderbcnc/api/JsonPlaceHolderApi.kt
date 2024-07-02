@@ -39,5 +39,5 @@ fun interface JsonPlaceHolderApi {
         ), ApiResponse(code = 200, message = "Success", response = Error::class, responseContainer = "List")]
     )
     @GetMapping(value = ["/album"], produces = ["application/json;charset=utf-8"])
-    fun listAlbum(): ResponseEntity<Album>
+    fun listAlbum(): ResponseEntity<List<Album>>
 }
